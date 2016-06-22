@@ -22,6 +22,7 @@ namespace FastAtomicLazy
 
         public FastLazy(Func<T> producer)
         {
+            if(producer == null) throw new ArgumentNullException(nameof(producer));
             _producer = producer;
         }
 
