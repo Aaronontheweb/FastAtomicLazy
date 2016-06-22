@@ -11,7 +11,8 @@ namespace FastAtomicLazy
     /// A fast, atomic lazy that only allows a single publish operation to happen,
     /// but allows executions to occur concurrently.
     /// 
-    /// Does not cache exceptions. Designed for use with <typeparam name="T"/> types
+    /// Does not cache exceptions. Designed for use with <typeparam name="T"/> types that are <see cref="IDisposable"/>
+    /// or are otherwise considered to be expensive to allocate. Read the full explanation here: https://github.com/Aaronontheweb/FastAtomicLazy#rationale
     /// </summary>
     public sealed class FastLazy<T>
     {
