@@ -51,7 +51,7 @@ namespace FastAtomicLazy.Tests
             int attempts = 0;
             Func<int> slowValueFactory = () =>
             {
-                attempts++;
+                Interlocked.Increment(ref attempts);
                 Thread.Sleep(100);
                 return new Random().Next(1, Int32.MaxValue);
             };
