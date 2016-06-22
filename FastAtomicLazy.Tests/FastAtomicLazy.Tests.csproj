@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Faker, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\faker-csharp.1.2.0\lib\net4\Faker.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FsCheck, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FsCheck.2.5.0\lib\net45\FsCheck.dll</HintPath>
       <Private>True</Private>

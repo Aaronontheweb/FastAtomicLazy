@@ -66,5 +66,42 @@ namespace FastAtomicLazy.Tests
             Assert.Equal(1000, values.Count);
             Assert.Equal(1, attempts);
         }
+
+        [Fact]
+        public void FastAtomicLazy_must_be_threadsafe_AnyRef()
+        {
+            for (var c = 0; c < 100000; c++) // try this 100000 times
+            {
+                var values = new ConcurrentBag<string>();
+                var fal = new FastLazy<string>(() => Faker.Generators.Strings.GenerateAlphaNumericString());
+                var result = Parallel.For(0, 1000, i => values.Add(fal.Value)); // 1000 concurrent operations
+                SpinWait.SpinUntil(() => result.IsCompleted);
+                var value = values.First();
+                Assert.NotNull(value);
+                Assert.True(values.All(x => x.Equals(value)));
+            }
+        }
+
+        [Fact]
+        public void FastAtomicLazy_only_single_value_creation_attempt_AnyRef()
+        {
+            int attempts = 0;
+            Func<string> slowValueFactory = () =>
+            {
+                Interlocked.Increment(ref attempts);
+                Thread.Sleep(100);
+                return Faker.Generators.Strings.GenerateAlphaNumericString();
+            };
+
+            var values = new ConcurrentBag<string>();
+            var fal = new FastLazy<string>(slowValueFactory);
+            var result = Parallel.For(0, 1000, i => values.Add(fal.Value)); // 1000 concurrent operations
+            SpinWait.SpinUntil(() => result.IsCompleted);
+            var value = values.First();
+            Assert.NotNull(value);
+            Assert.True(values.All(x => x.Equals(value)));
+            Assert.Equal(1000, values.Count);
+            Assert.Equal(1, attempts);
+        }
     }
 }
