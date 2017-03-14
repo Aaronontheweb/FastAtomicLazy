@@ -35,9 +35,9 @@ JitModules=clrjit-v4.6.1080.0
 Type=FastLazyBenchmarks  Mode=Throughput  
 
 ```
-                           Method |    Median |    StdDev |
---------------------------------- |---------- |---------- |
-                     ReadFastLazy | 1.2866 ns | 0.1015 ns |
-            ReadLazyNotThreadSafe | 2.8733 ns | 0.0448 ns |
-    ReadLazyPublishOnlyThreadSafe | 2.8824 ns | 0.0993 ns |
- ReadLazyReadAndExecuteThreadSafe | 2.8793 ns | 0.0524 ns |
+|                           Method |    Median |    StdDev |
+|--------------------------------- |---------- |---------- |
+|                     ReadFastLazy | 1.2866 ns | 0.1015 ns |
+|            ReadLazyNotThreadSafe | 2.8733 ns | 0.0448 ns |
+|    ReadLazyPublishOnlyThreadSafe | 2.8824 ns | 0.0993 ns |
+| ReadLazyReadAndExecuteThreadSafe | 2.8793 ns | 0.0524 ns |
