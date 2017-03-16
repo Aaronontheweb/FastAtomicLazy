@@ -17,8 +17,7 @@ namespace FastAtomicLazy
     public sealed class FastLazy<T>
     {
         private readonly Func<T> _producer;
-        private byte _created = 0;
-        private byte _creating = 0;
+        private int _status = 0;
         private T _createdValue;
 
         public FastLazy(Func<T> producer)
@@ -32,13 +31,7 @@ namespace FastAtomicLazy
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsValueCreatedInternal()
         {
-            return Volatile.Read(ref _created) == 1;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private bool IsValueCreationInProgress()
-        {
-            return Volatile.Read(ref _creating) == 1;
+            return Volatile.Read(ref _status) == 2;
         }
 
         public T Value
@@ -47,11 +40,10 @@ namespace FastAtomicLazy
             {
                 if (IsValueCreatedInternal())
                     return _createdValue;
-                if (!IsValueCreationInProgress())
+                if (Interlocked.CompareExchange(ref _status, 1, 0) == 0)
                 {
-                    Volatile.Write(ref _creating, 1);
                     _createdValue = _producer();
-                    Volatile.Write(ref _created, 1);
+                    Volatile.Write(ref _status, 2);
                 }
                 else
                 {
