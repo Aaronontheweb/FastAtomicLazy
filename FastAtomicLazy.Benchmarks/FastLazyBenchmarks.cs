@@ -15,7 +15,7 @@ namespace FastAtomicLazy.Benchmarks
         private Lazy<int> _readAndExecuteSafeLazy;
 
 
-        [Setup]
+        [GlobalSetup]
         public void Setup()
         {
             _fastLazy = new FastLazy<int>(() => new Random().Next());
