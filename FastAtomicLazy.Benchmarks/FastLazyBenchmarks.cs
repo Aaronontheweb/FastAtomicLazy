@@ -4,9 +4,11 @@
 using System;
 using System.Threading;
 using BenchmarkDotNet.Attributes;
+using FastAtomicLazy.Benchmarks.Configs;
 
 namespace FastAtomicLazy.Benchmarks
 {
+    [Config(typeof(MicroBenchmarkConfig))]
     public class FastLazyBenchmarks
     {
         private FastLazy<int> _fastLazy;
