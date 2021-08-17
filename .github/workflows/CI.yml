@@ -4,6 +4,12 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+
+env:
+  # Path to the solution file relative to the root of the project.
+  SOLUTION_FILE_PATH: .
+  BUILD_CONFIGURATION: Release
+
 jobs:
   build:
     runs-on: [windows-latest]
@@ -17,7 +23,8 @@ jobs:
       uses: NuGet/setup-nuget@v1.0.2
      
     - name: Restore NuGet Packages
-      run: nuget restore
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
-    - name: Build and Publish Web App
-      run: msbuild /p:Configuration=Release .
+    - name: Build
+      run: msbuild /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
