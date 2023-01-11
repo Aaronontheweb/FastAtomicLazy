@@ -1,5 +1,7 @@
 # FastAtomicLazy
 
+[![CI](https://github.com/Aaronontheweb/FastAtomicLazy/actions/workflows/CI.yml/badge.svg)](https://github.com/Aaronontheweb/FastAtomicLazy/actions/workflows/CI.yml)
+
 Faster, less leakier thread-safe Lazy&lt;T&gt; implementation in C#.
 
 ## Rationale
