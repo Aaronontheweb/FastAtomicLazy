@@ -21,7 +21,7 @@ namespace FastAtomicLazy.Benchmarks
         public void Setup()
         {
             _fastLazy = new FastLazy<int>(() => new Random().Next());
-            _unsafeLazy = new Lazy<int>(() => new Random().Next());
+            _unsafeLazy = new Lazy<int>(() => new Random().Next(), LazyThreadSafetyMode.None);
             _publishOnlySafeLazy = new Lazy<int>(() => new Random().Next(), LazyThreadSafetyMode.PublicationOnly);
             _readAndExecuteSafeLazy = new Lazy<int>(() => new Random().Next(), LazyThreadSafetyMode.ExecutionAndPublication);
         }
