@@ -112,7 +112,8 @@ namespace FastAtomicLazy.Tests
             {
                 Assert.Throws<Exception>(() => _ = lazy.Value);
             });
-            SpinWait.SpinUntil(() => result.IsCompleted);
+            
+            Assert.True(result.IsCompleted);
         }
     }
 }
