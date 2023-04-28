@@ -103,5 +103,16 @@ namespace FastAtomicLazy.Tests
             Assert.Equal(1000, values.Count);
             Assert.Equal(1, attempts);
         }
+        
+        [Fact]
+        public void FastLazy_AllThreads_ShouldThrowException_WhenFactoryThrowsException()
+        {
+            var lazy = new FastLazy<string>(() => throw new Exception("Factory exception"));
+            var result = Parallel.For(0, Environment.ProcessorCount, i =>
+            {
+                Assert.Throws<Exception>(() => _ = lazy.Value);
+            });
+            SpinWait.SpinUntil(() => result.IsCompleted);
+        }
     }
 }
