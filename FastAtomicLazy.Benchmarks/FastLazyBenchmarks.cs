@@ -51,7 +51,7 @@ namespace FastAtomicLazy.Benchmarks
         }
 
         [Benchmark]
-        public void Factory()
+        public void ProducerLazy()
         {
             var lazy = new FastLazy<int>(() => new Random().Next());
             var _ = lazy.Value;
