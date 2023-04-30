@@ -108,7 +108,7 @@ namespace FastAtomicLazy.Tests
         public void FastLazy_AllThreads_ShouldThrowException_WhenFactoryThrowsException()
         {
             var lazy = new FastLazy<string>(() => throw new Exception("Factory exception"));
-            var result = Parallel.For(0, Environment.ProcessorCount, i =>
+            var result = Parallel.For(0, 10, i =>
             {
                 Assert.Throws<Exception>(() => _ = lazy.Value);
             });
