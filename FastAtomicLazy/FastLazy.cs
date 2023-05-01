@@ -18,6 +18,7 @@ namespace FastAtomicLazy
     {
         private Func<T> _producer;
         private int _status = 0;
+        private Exception _exception;
         private T _createdValue;
 
         public FastLazy(Func<T> producer)
@@ -26,22 +27,36 @@ namespace FastAtomicLazy
         }
 
         public bool IsValueCreated => Volatile.Read(ref _status) == 2;
-
+        private bool IsExceptionThrown => Volatile.Read(ref _exception) != null;
+        
         public T Value
         {
             get
             {
                 if (IsValueCreated)
                     return _createdValue;
+                
                 if (Interlocked.CompareExchange(ref _status, 1, 0) == 0)
                 {
-                    _createdValue = _producer();
+                    try
+                    {
+                        _createdValue = _producer();
+                    }
+                    catch (Exception e)
+                    {
+                        Volatile.Write(ref _exception, e);
+                        throw;
+                    }
+
                     Volatile.Write(ref _status, 2);
                     _producer = null; // release for GC
                 }
                 else
                 {
-                    SpinWait.SpinUntil(() => IsValueCreated);
+                    SpinWait.SpinUntil(() => IsValueCreated || IsExceptionThrown);
+                    var e = Volatile.Read(ref _exception);
+                    if (e != null)
+                        throw e;
                 }
                 return _createdValue;
             }

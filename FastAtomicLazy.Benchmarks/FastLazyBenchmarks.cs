@@ -49,5 +49,12 @@ namespace FastAtomicLazy.Benchmarks
         {
             return _readAndExecuteSafeLazy.Value;
         }
+
+        [Benchmark]
+        public void ProducerLazy()
+        {
+            var lazy = new FastLazy<int>(() => new Random().Next());
+            var _ = lazy.Value;
+        }
     }
 }
